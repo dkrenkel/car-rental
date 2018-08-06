@@ -1,3 +1,3 @@
 Car Rental API
 
-API that allows cars availability searchs and reservations.
+API that allows cars availability searches and reservations.
