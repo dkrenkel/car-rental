@@ -25,9 +25,11 @@ targetCompatibility = 1.8
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
-    testCompile group:'org.seleniumhq.selenium', name: 'selenium-java', version: '2.53.0'
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
 
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '1.5.13.RELEASE'
+    compile 'mysql:mysql-connector-java'
 
-    compile("org.springframework.boot:spring-boot-starter-data-rest")
+    compile('org.springframework.boot:spring-boot-starter-web')
+
+    compile('org.springframework.boot:spring-boot-starter-data-rest')
 }
