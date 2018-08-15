@@ -22,7 +22,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public User getUserWithThisID(@PathVariable String id){
+    public User getUser(@PathVariable Long id){
         Optional<User> user = repository.findById(id);
 
         if(!user.isPresent()) throw new RuntimeException();
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable String id){
+    public void deleteUser(@PathVariable Long id){
         repository.deleteById(id);
     }
 
@@ -41,7 +41,7 @@ public class UserController {
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(createdUser.getID())
+                .buildAndExpand(createdUser.getId())
                 .toUri();
         return ResponseEntity.created(location).build();
     }

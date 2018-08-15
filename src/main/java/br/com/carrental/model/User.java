@@ -9,20 +9,22 @@ import java.util.Date;
 public class User {
 
     @Id
-    private String ID;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    private String idDocument;
     private String name;
     private String email;
     private String address;
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date birthDate; //type to define, probably Calendar...
+    private Date birthDate;
 
     public User(){
         super();
     }
 
-    public User(String ID, String name, String email, String address, Date birthDate) {
-        this.ID = ID;
+    public User(String idDocument, String name, String email, String address, Date birthDate) {
+        this.idDocument = idDocument;
         this.name = name;
         this.email = email;
         this.address = address;
@@ -37,8 +39,12 @@ public class User {
         return email;
     }
 
-    public String getID() {
-        return ID;
+    public Long getId() {
+        return id;
+    }
+
+    public String getIdDocument() {
+        return idDocument;
     }
 
     public String getAddress() {
@@ -49,12 +55,15 @@ public class User {
         return birthDate;
     }
 
-    //only two setter are necessary, because they could have to be modified
     public void setEmail(String email) {
         this.email = email;
     }
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public void setIdDocument(String idDocument) {
+        this.idDocument = idDocument;
     }
 }
