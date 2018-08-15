@@ -1,17 +1,48 @@
 package br.com.carrental.control;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import br.com.carrental.model.User;
+import br.com.carrental.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class UserController {
-    //Testing
-    @GetMapping("/hello")
-    @ResponseBody
-        public String sayHello(@RequestParam(value = "name", defaultValue = "World") String name){
-            return "Hello " + name;
-        }
+    @Autowired
+    private UserRepository repository;
 
+    @GetMapping("/users")
+    public List<User> getUsers(){
+        return repository.findAll();
+    }
+
+    @GetMapping("/users/{id}")
+    public User getUserWithThisID(@PathVariable String id){
+        Optional<User> user = repository.findById(id);
+
+        if(!user.isPresent()) throw new RuntimeException();
+        return user.get();
+    }
+
+    @DeleteMapping("/users/{id}")
+    public void deleteUser(@PathVariable String id){
+        repository.deleteById(id);
+    }
+
+    @PostMapping("/users")
+    public ResponseEntity<Object> createUser(@RequestBody User user){
+        User createdUser = repository.save(user);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdUser.getID())
+                .toUri();
+        return ResponseEntity.created(location).build();
+    }
 }

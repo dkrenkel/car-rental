@@ -1,13 +1,27 @@
 package br.com.carrental.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
 public class User {
+
+    @Id
     private String ID;
     private String name;
     private String email;
     private String address;
-    private String birthDate; //type to define, probably Calendar...
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date birthDate; //type to define, probably Calendar...
 
-    public User(String ID, String name, String email, String address, String birthDate) {
+    public User(){
+        super();
+    }
+
+    public User(String ID, String name, String email, String address, Date birthDate) {
         this.ID = ID;
         this.name = name;
         this.email = email;
@@ -31,7 +45,7 @@ public class User {
         return address;
     }
 
-    public String getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
