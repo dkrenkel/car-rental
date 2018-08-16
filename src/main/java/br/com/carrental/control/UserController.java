@@ -3,6 +3,7 @@ package br.com.carrental.control;
 import br.com.carrental.model.User;
 import br.com.carrental.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -22,16 +23,24 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public User getUser(@PathVariable Long id){
+    public ResponseEntity getUser(@PathVariable Long id){
         Optional<User> user = repository.findById(id);
 
-        if(!user.isPresent()) throw new RuntimeException();
-        return user.get();
+        if(!user.isPresent()){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity(user, HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable Long id){
+    public ResponseEntity deleteUser(@PathVariable Long id){
+
+        if(!repository.findById(id).isPresent()){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
         repository.deleteById(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/users")
