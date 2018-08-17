@@ -45,7 +45,13 @@ public class UserController {
 
     @PostMapping("/users")
     public ResponseEntity<Object> createUser(@RequestBody User user){
-        User createdUser = repository.save(user);
+        User createdUser;
+        //verification if the user was already created
+        try{
+            createdUser = repository.save(user);
+        }catch (Exception e){
+            return new ResponseEntity(HttpStatus.CONFLICT);
+        }
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

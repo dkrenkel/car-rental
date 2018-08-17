@@ -10,13 +10,27 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false, insertable = false)
     private Long id;
+
+    @Column(name = "id_document", nullable = false,
+            length = 11, columnDefinition = "char(11)", unique = true)
     private String idDocument;
+
+    @Column(name = "complete_name", nullable = false,
+            length = 250, columnDefinition = "varchar(250)")
     private String name;
+
+    @Column(length = 250, columnDefinition = "varchar(250)",
+            unique = true)
     private String email;
+
+    @Column(length = 250, columnDefinition = "varchar(250)")
     private String address;
+
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Column(name = "birth_date")
     private Date birthDate;
 
     public User(){
