@@ -10,6 +10,8 @@ public class UserDTO implements Serializable {
     private String address;
     private String birthDate;
 
+    public UserDTO(){}
+
     public UserDTO(String idDocument, String name, String email, String address, String birthDate) {
         this.idDocument = idDocument;
         this.name = name;

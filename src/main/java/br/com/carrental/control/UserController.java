@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,11 +66,17 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<Object> createUser(@RequestBody User user) {
+    public ResponseEntity<Object> createUser(@RequestBody UserDTO user) throws ParseException {
         User createdUser;
         //verification if the user was already created
         try {
-            createdUser = repository.save(user);
+            createdUser = repository
+                    .save(new User(user.getIdDocument(),
+                    user.getName(),
+                    user.getEmail(),
+                    user.getAddress(),
+                    new SimpleDateFormat("dd/MM/yyyy")
+                            .parse(user.getBirthDate())));
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.CONFLICT);
         }
@@ -81,11 +88,4 @@ public class UserController {
                 .toUri();
         return ResponseEntity.created(location).build();
     }
-
-    /*
-     *@GetMapping("/users")
-     *public List<User> getUsers(){
-     *    return repository.findAll();
-     *}
-     */
 }
