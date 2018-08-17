@@ -33,7 +33,7 @@ public class User {
     @Column(name = "birth_date")
     private Date birthDate;
 
-    public User(){
+    public User() {
         super();
     }
 
