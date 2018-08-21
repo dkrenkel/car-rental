@@ -1,7 +1,8 @@
 package br.com.carrental.service;
 
-import br.com.carrental.control.UserController;
 import br.com.carrental.dto.UserDTO;
+import br.com.carrental.exception.UserAlreadyExistsException;
+import br.com.carrental.exception.UserNotFoundException;
 import br.com.carrental.model.User;
 import br.com.carrental.repository.UserRepository;
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class UserServiceImpl {
     @Autowired
     private UserRepository repository;
 
-    private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     public ResponseEntity getAllUsers() {
         List<User> list = repository.findAll();
@@ -40,16 +41,16 @@ public class UserServiceImpl {
                     new SimpleDateFormat("dd/MM/yyyy")
                             .format(user.getBirthDate())));
         }
-        LOGGER.info("m=getUsers: Get all users success");
+        LOGGER.info("m=getAllUsers: GET all users success");
         return new ResponseEntity(listDTO, HttpStatus.OK);
     }
 
-    public ResponseEntity getUserById(@PathVariable Long id) {
+    public ResponseEntity getUserById(@PathVariable Long id) throws UserNotFoundException{
         Optional<User> user = repository.findById(id);
 
         if (!user.isPresent()) {
-            LOGGER.warn("m=getUser: Get user id = {} not found, ERROR: 404", id);
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            LOGGER.warn("m=getUserById: GET user id = {} not found, ERROR: 404", id);
+            throw new UserNotFoundException();
         }
 
         UserDTO userDTO = new UserDTO(user.get().getIdDocument(),
@@ -59,21 +60,22 @@ public class UserServiceImpl {
                 new SimpleDateFormat("dd/MM/yyyy")
                         .format(user.get().getBirthDate()));
 
-        LOGGER.info("m=getUser: Get user id = {} success", id);
+        LOGGER.info("m=getUserById: GET user id = {} success", id);
         return new ResponseEntity(userDTO, HttpStatus.OK);
     }
 
-    public ResponseEntity deleteUserById(@PathVariable Long id) {
+    public ResponseEntity deleteUserById(@PathVariable Long id) throws UserNotFoundException {
         if (!repository.findById(id).isPresent()) {
-            LOGGER.warn("m=deleteUser: Delete user id = {} not found, ERROR:404", id);
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            LOGGER.warn("m=deleteUserById: DELETE user id = {} not found, ERROR:404", id);
+            throw new UserNotFoundException();
+            //return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         repository.deleteById(id);
-        LOGGER.info("m=deleteUser: Delete user id = {} success", id);
+        LOGGER.info("m=deleteUserById: DELETE user id = {} success", id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    public ResponseEntity<Object> addUser(@RequestBody UserDTO user) throws ParseException {
+    public ResponseEntity<Object> addUser(@RequestBody UserDTO user) throws ParseException, UserAlreadyExistsException {
         User createdUser;
         //verification if the user was already created
         try {
@@ -85,8 +87,8 @@ public class UserServiceImpl {
                             new SimpleDateFormat("dd/MM/yyyy")
                                     .parse(user.getBirthDate())));
         } catch (DataIntegrityViolationException e) {
-            LOGGER.warn("m=createUser: Post user idDocument = {} has conflict, ERROR:409", user.getIdDocument());
-            return new ResponseEntity(HttpStatus.CONFLICT);
+            LOGGER.warn("m=addUser: POST user idDocument = {} has conflict, ERROR:409", user.getIdDocument());
+            throw new UserAlreadyExistsException();
         }
 
         URI location = ServletUriComponentsBuilder
@@ -94,7 +96,7 @@ public class UserServiceImpl {
                 .path("/{id}")
                 .buildAndExpand(createdUser.getId())
                 .toUri();
-        LOGGER.info("m=createUser: Post user idDocument = {} success", createdUser.getIdDocument());
+        LOGGER.info("m=addUser: POST user idDocument = {} success", createdUser.getIdDocument());
         return ResponseEntity.created(location).build();
     }
 
