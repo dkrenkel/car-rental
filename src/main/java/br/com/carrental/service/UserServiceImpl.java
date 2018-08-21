@@ -1,10 +1,10 @@
 package br.com.carrental.service;
 
-import br.com.carrental.dto.UserDTO;
-import br.com.carrental.exception.UserAlreadyExistsException;
-import br.com.carrental.exception.UserNotFoundException;
+import br.com.carrental.service.dto.UserDTO;
+import br.com.carrental.service.exception.UserAlreadyExistsException;
+import br.com.carrental.service.exception.UserNotFoundException;
 import br.com.carrental.model.User;
-import br.com.carrental.repository.UserRepository;
+import br.com.carrental.service.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class UserServiceImpl {
         return new ResponseEntity(listDTO, HttpStatus.OK);
     }
 
-    public ResponseEntity getUserById(@PathVariable Long id) throws UserNotFoundException{
+    public ResponseEntity getUserById(@PathVariable Long id) throws UserNotFoundException {
         Optional<User> user = repository.findById(id);
 
         if (!user.isPresent()) {

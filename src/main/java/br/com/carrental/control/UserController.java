@@ -1,8 +1,8 @@
 package br.com.carrental.control;
 
-import br.com.carrental.dto.UserDTO;
-import br.com.carrental.exception.UserAlreadyExistsException;
-import br.com.carrental.exception.UserNotFoundException;
+import br.com.carrental.service.dto.UserDTO;
+import br.com.carrental.service.exception.UserAlreadyExistsException;
+import br.com.carrental.service.exception.UserNotFoundException;
 import br.com.carrental.service.UserServiceImpl;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;

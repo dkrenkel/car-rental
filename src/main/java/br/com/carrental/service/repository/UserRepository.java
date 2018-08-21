@@ -1,4 +1,4 @@
-package br.com.carrental.repository;
+package br.com.carrental.service.repository;
 
 import br.com.carrental.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package br.com.carrental.exception;
+package br.com.carrental.service.exception;
 
 public class UserAlreadyExistsException extends RuntimeException {
 }

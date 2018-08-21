@@ -1,4 +1,4 @@
-package br.com.carrental.dto;
+package br.com.carrental.service.dto;
 
 import java.io.Serializable;
 
