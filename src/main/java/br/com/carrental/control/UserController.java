@@ -1,91 +1,89 @@
 package br.com.carrental.control;
 
-import br.com.carrental.dto.UserDTO;
-import br.com.carrental.model.User;
-import br.com.carrental.repository.UserRepository;
+import br.com.carrental.service.dto.UserDTO;
+import br.com.carrental.service.exception.DateNotValidException;
+import br.com.carrental.service.exception.UserAlreadyExistsException;
+import br.com.carrental.service.exception.UserNotFoundException;
+import br.com.carrental.service.UserService;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class UserController {
     @Autowired
-    private UserRepository repository;
+    private UserService service;
+
+    private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping("/users")
     public ResponseEntity getUsers() {
-        List<User> list = repository.findAll();
-        List<UserDTO> listDTO = new ArrayList<>();
-        for (User user : list) {
-            listDTO.add(new UserDTO(user.getIdDocument(),
-                    user.getName(),
-                    user.getEmail(),
-                    user.getAddress(),
-                    new SimpleDateFormat("dd/MM/yyyy")
-                            .format(user.getBirthDate())));
-        }
-        return new ResponseEntity(listDTO, HttpStatus.OK);
+        LOGGER.info("m=getUsers: Executing");
+
+        return ResponseEntity.ok(service.getAllUsers());
     }
 
     @GetMapping("/users/{id}")
     public ResponseEntity getUser(@PathVariable Long id) {
-        Optional<User> user = repository.findById(id);
+        LOGGER.info("m=getUser: Trying to get user, with id = {}", id);
 
-        if (!user.isPresent()) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        try {
+            return ResponseEntity.ok(service.getUserById(id));
+        } catch (UserNotFoundException e) {
+            LOGGER.warn("m=getUser: user with id = {} does not exist, throws {}", id, e.toString());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
-        UserDTO userDTO = new UserDTO(user.get().getIdDocument(),
-                user.get().getName(),
-                user.get().getEmail(),
-                user.get().getAddress(),
-                new SimpleDateFormat("dd/MM/yyyy")
-                        .format(user.get().getBirthDate()));
-
-
-        return new ResponseEntity(userDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{id}")
     public ResponseEntity deleteUser(@PathVariable Long id) {
+        LOGGER.info("m=deleteUser: Trying to delete user with id = {}", id);
 
-        if (!repository.findById(id).isPresent()) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        try {
+            service.deleteUserById(id);
+
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (UserNotFoundException e) {
+            LOGGER.warn("m=deleteUser: User with id = {} does not exist, throws {}", id, e.toString());
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        repository.deleteById(id);
-        return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/users")
-    public ResponseEntity<Object> createUser(@RequestBody UserDTO user) throws ParseException {
-        User createdUser;
-        //verification if the user was already created
-        try {
-            createdUser = repository
-                    .save(new User(user.getIdDocument(),
-                    user.getName(),
-                    user.getEmail(),
-                    user.getAddress(),
-                    new SimpleDateFormat("dd/MM/yyyy")
-                            .parse(user.getBirthDate())));
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.CONFLICT);
-        }
+    public ResponseEntity<Object> createUser(@RequestBody UserDTO user) {
+        LOGGER.info("m=createUser: Trying to POST user with idDocument = {}", user.getIdDocument());
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(createdUser.getId())
-                .toUri();
-        return ResponseEntity.created(location).build();
+        try {
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(service.saveUser(user))
+                    .toUri();
+
+            return ResponseEntity.created(location).build();
+        } catch (UserAlreadyExistsException e) {
+            LOGGER.warn("m=createUser: User with idDocument = {} and email {} already exist, throws {}",
+                    user.getIdDocument(), user.getEmail(), e.toString());
+
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } catch (DateNotValidException e) {
+            LOGGER.warn("m=createUser: Wrong format of birthDate {} on User with idDocument {}, must be \"dd/MM/yyyy\" , throws ",
+                    user.getBirthDate(), user.getIdDocument(), e);
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (ParseException e) {
+            LOGGER.warn("m=createUser: Error parsing date, throws ", e);
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
+
 }
