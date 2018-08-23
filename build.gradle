@@ -24,12 +24,30 @@ targetCompatibility = 1.8
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+
     testCompile group:'org.seleniumhq.selenium', name: 'selenium-java', version: '2.53.0'
+
     compile('org.slf4j: slf4j-api')
+
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
+
     compile('mysql:mysql-connector-java')
+
     compile('org.springframework.boot:spring-boot-starter-web')
+
     compile('org.springframework.boot:spring-boot-starter-data-rest')
+
+    compile('javax.validation:validation-api')
+
+    compile('org.hibernate.validator:hibernate-validator-annotation-processor')
+
+    compile('org.hibernate.validator:hibernate-validator')
+
+    compile('javax.el: javax.el-api')
+
+    compile('org.glassfish.web:javax.el')
+
     runtime('org.springframework.boot:spring-boot-devtools')
+
     runtime('com.h2database:h2')
 }

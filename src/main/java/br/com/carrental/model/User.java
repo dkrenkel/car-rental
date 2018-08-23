@@ -18,14 +18,14 @@ public class User {
     private String idDocument;
 
     @Column(name = "complete_name", nullable = false,
-            length = 50, columnDefinition = "varchar(250)")
+            length = 50, columnDefinition = "varchar(50)")
     private String name;
 
-    @Column(length = 100, columnDefinition = "varchar(250)",
+    @Column(length = 100, columnDefinition = "varchar(100)",
             unique = true)
     private String email;
 
-    @Column(length = 100, columnDefinition = "varchar(250)")
+    @Column(length = 100, columnDefinition = "varchar(100)")
     private String address;
 
     @Temporal(TemporalType.DATE)

@@ -16,6 +16,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.text.ParseException;
 
+/** Control class of Users
+ * @author Micael
+ * */
+
 @RestController
 public class UserController {
     @Autowired
