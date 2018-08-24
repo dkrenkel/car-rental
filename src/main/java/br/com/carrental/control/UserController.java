@@ -1,8 +1,7 @@
 package br.com.carrental.control;
 
 import br.com.carrental.service.dto.UserDTO;
-import br.com.carrental.service.exception.DateNotValidException;
-import br.com.carrental.service.exception.UserAlreadyExistsException;
+import br.com.carrental.service.exception.ConstraintConflictException;
 import br.com.carrental.service.exception.UserNotFoundException;
 import br.com.carrental.service.UserService;
 import org.slf4j.LoggerFactory;
@@ -13,8 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
-import java.text.ParseException;
+
+/**
+ * Control class of Users
+ *
+ * @author Micael
+ */
 
 @RestController
 public class UserController {
@@ -31,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity getUser(@PathVariable Long id) {
+    public ResponseEntity getUser(@PathVariable final Long id) {
         LOGGER.info("m=getUser: Trying to get user, with id = {}", id);
 
         try {
@@ -43,7 +48,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity deleteUser(@PathVariable Long id) {
+    public ResponseEntity deleteUser(@PathVariable final Long id) {
         LOGGER.info("m=deleteUser: Trying to delete user with id = {}", id);
 
         try {
@@ -58,31 +63,22 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<Object> createUser(@RequestBody UserDTO user) {
+    public ResponseEntity<Object> createUser(@RequestBody @Valid final UserDTO user) {
         LOGGER.info("m=createUser: Trying to POST user with idDocument = {}", user.getIdDocument());
 
         try {
-            URI location = ServletUriComponentsBuilder
+            final URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
                     .buildAndExpand(service.saveUser(user))
                     .toUri();
 
             return ResponseEntity.created(location).build();
-        } catch (UserAlreadyExistsException e) {
-            LOGGER.warn("m=createUser: User with idDocument = {} and email {} already exist, throws {}",
-                    user.getIdDocument(), user.getEmail(), e.toString());
+        } catch (ConstraintConflictException e) {
+            LOGGER.warn("m=createUser: User with idDocument = {} and email {} has an attribute conflict or already exist, throws ",
+                    user.getIdDocument(), user.getEmail(), e);
 
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        } catch (DateNotValidException e) {
-            LOGGER.warn("m=createUser: Wrong format of birthDate {} on User with idDocument {}, must be \"dd/MM/yyyy\" , throws ",
-                    user.getBirthDate(), user.getIdDocument(), e);
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } catch (ParseException e) {
-            LOGGER.warn("m=createUser: Error parsing date, throws ", e);
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
