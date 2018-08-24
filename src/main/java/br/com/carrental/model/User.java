@@ -34,7 +34,7 @@ public class User {
         super();
     }
 
-    public User(String idDocument, String name, String email, String address, Date birthDate) {
+    public User(final String idDocument, final String name, String email, String address, Date birthDate) {
         this.idDocument = idDocument;
         this.name = name;
         this.email = email;

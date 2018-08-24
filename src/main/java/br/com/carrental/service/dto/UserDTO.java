@@ -29,7 +29,7 @@ public class UserDTO implements Serializable {
     public UserDTO() {
     }
 
-    public UserDTO(String idDocument, String name, String email, String address, Calendar birthDate) {
+    public UserDTO(final String idDocument, final String name, String email, String address, Calendar birthDate) {
         this.idDocument = idDocument;
         this.name = name;
         this.email = email;
