@@ -13,7 +13,7 @@ public class APIConfig {
     @Bean
     public ObjectMapper getObjectMapper() {
         final ObjectMapper objectMapper = new ObjectMapper();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC-3"));
         objectMapper.setDateFormat(simpleDateFormat);
         return objectMapper;

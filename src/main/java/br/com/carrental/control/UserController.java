@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity getUser(@PathVariable Long id) {
+    public ResponseEntity getUser(@PathVariable final Long id) {
         LOGGER.info("m=getUser: Trying to get user, with id = {}", id);
 
         try {
@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity deleteUser(@PathVariable Long id) {
+    public ResponseEntity deleteUser(@PathVariable final Long id) {
         LOGGER.info("m=deleteUser: Trying to delete user with id = {}", id);
 
         try {
@@ -63,11 +63,11 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<Object> createUser(@RequestBody @Valid UserDTO user) {
+    public ResponseEntity<Object> createUser(@RequestBody @Valid final UserDTO user) {
         LOGGER.info("m=createUser: Trying to POST user with idDocument = {}", user.getIdDocument());
 
         try {
-            URI location = ServletUriComponentsBuilder
+            final URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
                     .buildAndExpand(service.saveUser(user))
@@ -75,7 +75,7 @@ public class UserController {
 
             return ResponseEntity.created(location).build();
         } catch (ConstraintConflictException e) {
-            LOGGER.warn("m=createUser: User with idDocument = {} and email {} has a attribute conflict or already exist, throws ",
+            LOGGER.warn("m=createUser: User with idDocument = {} and email {} has an attribute conflict or already exist, throws ",
                     user.getIdDocument(), user.getEmail(), e);
 
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

@@ -30,8 +30,8 @@ public class UserService {
     public List<UserDTO> getAllUsers() {
         LOGGER.info("m=getAllUsers: GET all users success");
 
-        List<User> list = repository.findAll();
-        List<UserDTO> listDTO = new ArrayList<>();
+        final List<User> list = repository.findAll();
+        final List<UserDTO> listDTO = new ArrayList<>();
 
         for (User user : list) {
             listDTO.add(userMapper.map(user));
@@ -40,8 +40,8 @@ public class UserService {
         return listDTO;
     }
 
-    public UserDTO getUserById(Long id) throws UserNotFoundException {
-        Optional<User> user = repository.findById(id);
+    public UserDTO getUserById(final Long id) throws UserNotFoundException {
+        final Optional<User> user = repository.findById(id);
 
         if (!user.isPresent()) {
             LOGGER.warn("m=getUserById: GET user id = {} not found, ERROR: 404", id);
@@ -55,7 +55,7 @@ public class UserService {
         return userDTO;
     }
 
-    public void deleteUserById(Long id) throws UserNotFoundException {
+    public void deleteUserById(final Long id) throws UserNotFoundException {
 
         if (!repository.findById(id).isPresent()) {
             LOGGER.warn("m=deleteUserById: DELETE user id = {} not found, ERROR:404", id);
@@ -67,8 +67,8 @@ public class UserService {
         LOGGER.info("m=deleteUserById: DELETE user id = {} success", id);
     }
 
-    public Long saveUser(UserDTO user) throws ConstraintConflictException {
-        User createdUser;
+    public Long saveUser(final UserDTO user) throws ConstraintConflictException {
+        final User createdUser;
 
         //verification if the user was already created
         try {
