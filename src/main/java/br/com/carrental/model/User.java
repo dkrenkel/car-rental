@@ -1,7 +1,5 @@
 package br.com.carrental.model;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -29,7 +27,6 @@ public class User {
     private String address;
 
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "birth_date")
     private Date birthDate;
 
