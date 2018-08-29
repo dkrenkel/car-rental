@@ -16,6 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Class of services of the API
+ *
+ * @author Micael
+ * */
+
 @Service
 public class UserService {
 
@@ -27,6 +33,11 @@ public class UserService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
+    /**
+     * Method that will serach the list of users in database.
+     *
+     * @return List - A List of Users, if does not exist an User in database, the list will be empty.
+     * */
     public List<UserDTO> getAllUsers() {
         LOGGER.info("m=getAllUsers: GET all users success");
 
@@ -40,6 +51,13 @@ public class UserService {
         return listDTO;
     }
 
+    /**
+     * Method that will serach in the list of users in database for a user with a given id.
+     *
+     * @param id
+     * @throws UserNotFoundException
+     * @return UserDTO - The User with id that was given.
+     * */
     public UserDTO getUserById(final Long id) throws UserNotFoundException {
         final Optional<User> user = repository.findById(id);
 
@@ -55,6 +73,12 @@ public class UserService {
         return userDTO;
     }
 
+    /**
+     * Method that will serach in the list of users in database for a user with a given id and delete it.
+     *
+     * @param id
+     * @throws UserNotFoundException
+     * */
     public void deleteUserById(final Long id) throws UserNotFoundException {
 
         if (!repository.findById(id).isPresent()) {
@@ -67,6 +91,13 @@ public class UserService {
         LOGGER.info("m=deleteUserById: DELETE user id = {} success", id);
     }
 
+    /**
+     * Method that will receive an UserDTO and save it on database.
+     *
+     * @param user
+     * @throws ConstraintConflictException
+     * @return Long - The id of the User that was given after the save on database.
+     * */
     public Long saveUser(final UserDTO user) throws ConstraintConflictException {
         final User createdUser;
 
