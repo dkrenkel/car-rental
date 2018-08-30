@@ -28,8 +28,8 @@ public class CalendarDeserializer extends JsonDeserializer<Calendar> {
      *
      * @param p
      * @param ctxt
-     * @throws IOException
-     * @throws JsonProcessingException
+     * @throws IOException - An I/O Excepiton of some sort has occured.
+     * @throws JsonProcessingException - If there is an error with the JSON.
      * @return Calendar - A calendar with the valid date and converted.
      * */
     @Override
