@@ -3,16 +3,10 @@ package br.com.carrental.control;
 import br.com.carrental.service.UserService;
 import br.com.carrental.service.dto.UserDTO;
 import br.com.carrental.service.exception.ConstraintConflictException;
-import br.com.carrental.service.exception.UserNotFoundException;
+import br.com.carrental.service.exception.EntityNotFoundException;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.Example;
-import io.swagger.annotations.ExampleProperty;
 import java.net.URI;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -68,7 +62,7 @@ public class UserController {
 
         try {
             return ResponseEntity.ok(service.getUserById(id));
-        } catch (UserNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             LOGGER.warn("m=getUser: user with id = {} does not exist, throws {}", id, e.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -89,7 +83,7 @@ public class UserController {
             service.deleteUserById(id);
 
             return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (UserNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             LOGGER.warn("m=deleteUser: User with id = {} does not exist, throws {}", id, e.toString());
 
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

@@ -4,17 +4,16 @@ import br.com.carrental.model.User;
 import br.com.carrental.service.dto.UserDTO;
 import br.com.carrental.service.dto.mapper.UserMapper;
 import br.com.carrental.service.exception.ConstraintConflictException;
-import br.com.carrental.service.exception.UserNotFoundException;
+import br.com.carrental.service.exception.EntityNotFoundException;
 import br.com.carrental.service.repository.UserRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Class of services of the API
@@ -56,14 +55,14 @@ public class UserService {
      *
      * @param id
      * @return UserDTO - The User with id that was given.
-     * @throws UserNotFoundException
+     * @throws EntityNotFoundException - When the user is not found on database
      */
-    public UserDTO getUserById(final Long id) throws UserNotFoundException {
+    public UserDTO getUserById(final Long id) throws EntityNotFoundException {
         final Optional<User> user = repository.findById(id);
 
         if (!user.isPresent()) {
             LOGGER.warn("m=getUserById: GET user id = {} not found, ERROR: 404", id);
-            throw new UserNotFoundException();
+            throw new EntityNotFoundException();
         }
 
         UserDTO userDTO = userMapper.map(user.get());
@@ -77,13 +76,13 @@ public class UserService {
      * Method that will serach in the list of users in database for a user with a given id and delete it.
      *
      * @param id
-     * @throws UserNotFoundException
+     * @throws EntityNotFoundException - When the user is not found on database
      */
-    public void deleteUserById(final Long id) throws UserNotFoundException {
+    public void deleteUserById(final Long id) throws EntityNotFoundException {
 
         if (!repository.findById(id).isPresent()) {
             LOGGER.warn("m=deleteUserById: DELETE user id = {} not found, ERROR:404", id);
-            throw new UserNotFoundException();
+            throw new EntityNotFoundException();
         }
 
         repository.deleteById(id);
@@ -96,7 +95,7 @@ public class UserService {
      *
      * @param user
      * @return Long - The id of the User that was given after the save on database.
-     * @throws ConstraintConflictException
+     * @throws ConstraintConflictException - When any constraint is violated. In this case, the oneness of idDocument and/or email.
      */
     public Long saveUser(final UserDTO user) throws ConstraintConflictException {
         final User createdUser;

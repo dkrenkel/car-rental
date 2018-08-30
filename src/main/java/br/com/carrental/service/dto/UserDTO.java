@@ -2,15 +2,14 @@ package br.com.carrental.service.dto;
 
 import br.com.carrental.service.dto.util.CalendarDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
+import java.util.Calendar;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.Calendar;
 
 /**
  * Data Transfer Object of User. Class that will receive the elements of a JSON request and transport it.
