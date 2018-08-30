@@ -27,7 +27,7 @@ dependencies {
 
     testCompile group:'org.seleniumhq.selenium', name: 'selenium-java', version: '2.53.0'
 
-    compile('org.slf4j: slf4j-api')
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
 
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
 
@@ -43,9 +43,9 @@ dependencies {
 
     compile('org.hibernate.validator:hibernate-validator')
 
-    compile('javax.el: javax.el-api')
+    compile group: 'javax.el', name: 'javax.el-api', version: '3.0.0'
 
-    compile('org.glassfish.web:javax.el')
+    compile group: 'org.glassfish.web', name: 'javax.el', version: '2.2.6'
 
     runtime('org.springframework.boot:spring-boot-devtools')
 

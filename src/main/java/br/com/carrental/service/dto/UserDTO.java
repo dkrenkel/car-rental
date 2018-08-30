@@ -10,26 +10,35 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Calendar;
 
+/**
+ * Data Transfer Object of User. Class that will receive the elements of a JSON request and transport it.
+ *
+ * @author Micael
+ */
 public class UserDTO implements Serializable {
 
     @NotNull
     @NotBlank
     @Size(max = 11, message = "Id Document must have under 11 characters")
     private String idDocument;
+
     @Size(min = 2, max = 50)
     @NotNull
     private String name;
+
     @Email
     private String email;
+
     @Size(max = 100)
     private String address;
+
     @JsonDeserialize(using = CalendarDeserializer.class)
     private Calendar birthDate;
 
     public UserDTO() {
     }
 
-    public UserDTO(final String idDocument, final String name, String email, String address, Calendar birthDate) {
+    public UserDTO(String idDocument, String name, String email, String address, Calendar birthDate) {
         this.idDocument = idDocument;
         this.name = name;
         this.email = email;
