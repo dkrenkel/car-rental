@@ -20,7 +20,7 @@ import java.util.Optional;
  * Class of services of the API
  *
  * @author Micael
- * */
+ */
 
 @Service
 public class UserService {
@@ -37,7 +37,7 @@ public class UserService {
      * Method that will serach the list of users in database.
      *
      * @return List - A List of Users, if does not exist an User in database, the list will be empty.
-     * */
+     */
     public List<UserDTO> getAllUsers() {
         LOGGER.info("m=getAllUsers: GET all users success");
 
@@ -55,9 +55,9 @@ public class UserService {
      * Method that will serach in the list of users in database for a user with a given id.
      *
      * @param id
-     * @throws UserNotFoundException
      * @return UserDTO - The User with id that was given.
-     * */
+     * @throws UserNotFoundException
+     */
     public UserDTO getUserById(final Long id) throws UserNotFoundException {
         final Optional<User> user = repository.findById(id);
 
@@ -78,7 +78,7 @@ public class UserService {
      *
      * @param id
      * @throws UserNotFoundException
-     * */
+     */
     public void deleteUserById(final Long id) throws UserNotFoundException {
 
         if (!repository.findById(id).isPresent()) {
@@ -95,9 +95,9 @@ public class UserService {
      * Method that will receive an UserDTO and save it on database.
      *
      * @param user
-     * @throws ConstraintConflictException
      * @return Long - The id of the User that was given after the save on database.
-     * */
+     * @throws ConstraintConflictException
+     */
     public Long saveUser(final UserDTO user) throws ConstraintConflictException {
         final User createdUser;
 
