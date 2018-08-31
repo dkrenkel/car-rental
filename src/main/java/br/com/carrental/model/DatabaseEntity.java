@@ -1,4 +1,6 @@
 package br.com.carrental.model;
 
-public interface Entity {
+import java.io.Serializable;
+
+public interface DatabaseEntity extends Serializable {
 }

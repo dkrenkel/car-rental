@@ -10,13 +10,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * Entity class of User
+ * DatabaseEntity class of User
  *
  * @author Micael
  * */
 
 @Entity
-public class User {
+public class User implements DatabaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

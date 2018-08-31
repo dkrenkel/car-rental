@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
  * @author Micael
  */
 @ApiModel
-public class UserDTO implements Serializable {
+public class UserDTO implements DTO {
 
     @NotNull
     @NotBlank

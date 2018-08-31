@@ -1,4 +1,6 @@
 package br.com.carrental.service.dto;
 
-public interface DTO {
+import java.io.Serializable;
+
+public interface DTO extends Serializable {
 }
