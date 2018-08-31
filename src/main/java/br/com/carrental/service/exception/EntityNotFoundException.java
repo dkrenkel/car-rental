@@ -5,5 +5,5 @@ package br.com.carrental.service.exception;
  *
  * @author Micael
  * */
-public class UserNotFoundException extends Exception {
+public class EntityNotFoundException extends Exception {
 }

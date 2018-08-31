@@ -4,16 +4,15 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * Class that Deserialize a Calendar that is given when the User is created, it converts and prevents invalid dates.
@@ -29,8 +28,8 @@ public class CalendarDeserializer extends JsonDeserializer<Calendar> {
      *
      * @param p
      * @param ctxt
-     * @throws IOException
-     * @throws JsonProcessingException
+     * @throws IOException - An I/O Excepiton of some sort has occured.
+     * @throws JsonProcessingException - If there is an error with the JSON.
      * @return Calendar - A calendar with the valid date and converted.
      * */
     @Override

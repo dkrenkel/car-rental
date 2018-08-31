@@ -2,9 +2,8 @@ package br.com.carrental.service.dto.mapper;
 
 import br.com.carrental.model.User;
 import br.com.carrental.service.dto.UserDTO;
-import org.springframework.stereotype.Component;
-
 import java.util.Calendar;
+import org.springframework.stereotype.Component;
 
 /**
  * Class used to Map an User entity creation from an UserDTO and an UserDTO creation from an User entity.
