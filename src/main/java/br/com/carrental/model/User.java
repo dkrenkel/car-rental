@@ -1,9 +1,19 @@
 package br.com.carrental.model;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+/**
+ * Entity class of User
+ *
+ * @author Micael
+ * */
 
 @Entity
 public class User {
@@ -18,18 +28,17 @@ public class User {
     private String idDocument;
 
     @Column(name = "complete_name", nullable = false,
-            length = 50, columnDefinition = "varchar(250)")
+            length = 50, columnDefinition = "varchar(50)")
     private String name;
 
-    @Column(length = 100, columnDefinition = "varchar(250)",
+    @Column(length = 100, columnDefinition = "varchar(100)",
             unique = true)
     private String email;
 
-    @Column(length = 100, columnDefinition = "varchar(250)")
+    @Column(length = 100, columnDefinition = "varchar(100)")
     private String address;
 
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "birth_date")
     private Date birthDate;
 
@@ -37,7 +46,7 @@ public class User {
         super();
     }
 
-    public User(String idDocument, String name, String email, String address, Date birthDate) {
+    public User(final String idDocument, final String name, String email, String address, Date birthDate) {
         this.idDocument = idDocument;
         this.name = name;
         this.email = email;

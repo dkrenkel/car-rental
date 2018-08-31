@@ -1,73 +1,88 @@
 package br.com.carrental.service;
 
-import br.com.carrental.service.dto.UserDTO;
-import br.com.carrental.service.exception.DateNotValidException;
-import br.com.carrental.service.exception.UserAlreadyExistsException;
-import br.com.carrental.service.exception.UserNotFoundException;
 import br.com.carrental.model.User;
+import br.com.carrental.service.dto.UserDTO;
+import br.com.carrental.service.dto.mapper.UserMapper;
+import br.com.carrental.service.exception.ConstraintConflictException;
+import br.com.carrental.service.exception.EntityNotFoundException;
 import br.com.carrental.service.repository.UserRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+/**
+ * Class of services of the API
+ *
+ * @author Micael
+ */
 
 @Service
 public class UserService {
+
+    @Autowired
+    private UserMapper userMapper;
+
     @Autowired
     private UserRepository repository;
 
     private final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
+    /**
+     * Method that will serach the list of users in database.
+     *
+     * @return List - A List of Users, if does not exist an User in database, the list will be empty.
+     */
     public List<UserDTO> getAllUsers() {
         LOGGER.info("m=getAllUsers: GET all users success");
 
-        List<User> list = repository.findAll();
-        List<UserDTO> listDTO = new ArrayList<>();
+        final List<User> list = repository.findAll();
+        final List<UserDTO> listDTO = new ArrayList<>();
 
         for (User user : list) {
-            listDTO.add(new UserDTO(user.getIdDocument(),
-                    user.getName(),
-                    user.getEmail(),
-                    user.getAddress(),
-                    new SimpleDateFormat("dd/MM/yyyy")
-                            .format(user.getBirthDate())));
+            listDTO.add(userMapper.map(user));
         }
 
         return listDTO;
     }
 
-    public UserDTO getUserById(Long id) throws UserNotFoundException {
-        Optional<User> user = repository.findById(id);
+    /**
+     * Method that will serach in the list of users in database for a user with a given id.
+     *
+     * @param id
+     * @return UserDTO - The User with id that was given.
+     * @throws EntityNotFoundException - When the user is not found on database
+     */
+    public UserDTO getUserById(final Long id) throws EntityNotFoundException {
+        final Optional<User> user = repository.findById(id);
 
         if (!user.isPresent()) {
             LOGGER.warn("m=getUserById: GET user id = {} not found, ERROR: 404", id);
-            throw new UserNotFoundException();
+            throw new EntityNotFoundException();
         }
 
-        UserDTO userDTO = new UserDTO(user.get().getIdDocument(),
-                user.get().getName(),
-                user.get().getEmail(),
-                user.get().getAddress(),
-                new SimpleDateFormat("dd/MM/yyyy")
-                        .format(user.get().getBirthDate()));
+        UserDTO userDTO = userMapper.map(user.get());
 
         LOGGER.info("m=getUserById: GET user id = {} success", id);
 
         return userDTO;
     }
 
-    public void deleteUserById(Long id) throws UserNotFoundException {
+    /**
+     * Method that will serach in the list of users in database for a user with a given id and delete it.
+     *
+     * @param id
+     * @throws EntityNotFoundException - When the user is not found on database
+     */
+    public void deleteUserById(final Long id) throws EntityNotFoundException {
 
         if (!repository.findById(id).isPresent()) {
             LOGGER.warn("m=deleteUserById: DELETE user id = {} not found, ERROR:404", id);
-            throw new UserNotFoundException();
+            throw new EntityNotFoundException();
         }
 
         repository.deleteById(id);
@@ -75,34 +90,27 @@ public class UserService {
         LOGGER.info("m=deleteUserById: DELETE user id = {} success", id);
     }
 
-    public Long saveUser(UserDTO user) throws ParseException, UserAlreadyExistsException, DateNotValidException {
-        if (!validDateFormat(user.getBirthDate())) {
-            throw new DateNotValidException();
-        }
-
-        User createdUser;
+    /**
+     * Method that will receive an UserDTO and save it on database.
+     *
+     * @param user
+     * @return Long - The id of the User that was given after the save on database.
+     * @throws ConstraintConflictException - When any constraint is violated. In this case, the oneness of idDocument and/or email.
+     */
+    public Long saveUser(final UserDTO user) throws ConstraintConflictException {
+        final User createdUser;
 
         //verification if the user was already created
         try {
             createdUser = repository
-                    .save(new User(user.getIdDocument(),
-                            user.getName(),
-                            user.getEmail(),
-                            user.getAddress(),
-                            new SimpleDateFormat("dd/MM/yyyy")
-                                    .parse(user.getBirthDate())));
+                    .save(userMapper.map(user));
         } catch (DataIntegrityViolationException e) {
             LOGGER.warn("m=saveUser: POST user idDocument = {} has conflict, ERROR:409", user.getIdDocument());
-            throw new UserAlreadyExistsException();
+            throw new ConstraintConflictException();
         }
 
         LOGGER.info("m=saveUser: POST user idDocument = {} success", createdUser.getIdDocument());
 
         return createdUser.getId();
     }
-
-    private boolean validDateFormat(String date) {
-        return date.matches("([0-9]{2})/([0-9]{2})/([0-9]{4})");
-    }
-
 }
