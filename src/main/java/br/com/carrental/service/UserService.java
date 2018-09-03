@@ -1,5 +1,6 @@
 package br.com.carrental.service;
 
+import br.com.carrental.config.CacheConfig;
 import br.com.carrental.model.User;
 import br.com.carrental.service.dto.UserDTO;
 import br.com.carrental.service.dto.mapper.UserMapper;
@@ -12,6 +13,9 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +41,7 @@ public class UserService {
      *
      * @return List - A List of Users, if does not exist an User in database, the list will be empty.
      */
+    @Cacheable(value = CacheConfig.CACHE_USERS)
     public List<UserDTO> getAllUsers() {
         LOGGER.info("m=getAllUsers: GET all users success");
 
@@ -57,6 +62,7 @@ public class UserService {
      * @return UserDTO - The User with id that was given.
      * @throws EntityNotFoundException - When the user is not found on database
      */
+    @Cacheable(value = CacheConfig.CACHE_USER_ID)
     public UserDTO getUserById(final Long id) throws EntityNotFoundException {
         final Optional<User> user = repository.findById(id);
 
@@ -78,6 +84,11 @@ public class UserService {
      * @param id
      * @throws EntityNotFoundException - When the user is not found on database
      */
+    @Caching(evict = {
+            @CacheEvict(value = CacheConfig.CACHE_USER_ID),
+            @CacheEvict(value = CacheConfig.CACHE_USERS, allEntries = true)
+    })
+    //If an user will be deleted, the two caches will be reseted.
     public void deleteUserById(final Long id) throws EntityNotFoundException {
 
         if (!repository.findById(id).isPresent()) {
@@ -97,6 +108,8 @@ public class UserService {
      * @return Long - The id of the User that was given after the save on database.
      * @throws ConstraintConflictException - When any constraint is violated. In this case, the oneness of idDocument and/or email.
      */
+    @CacheEvict(value = CacheConfig.CACHE_USERS, allEntries = true)
+    //If an user will be created, the cache of Users will be reseted.
     public Long saveUser(final UserDTO user) throws ConstraintConflictException {
         final User createdUser;
 
