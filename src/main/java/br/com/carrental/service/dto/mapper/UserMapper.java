@@ -12,14 +12,9 @@ import org.springframework.stereotype.Component;
  * */
 
 @Component
-public class UserMapper {
+public class UserMapper implements Mapper<User, UserDTO> {
 
-    /**
-     * Method that map an User from an UserDTO.
-     *
-     * @param dto
-     * @return User - User converted from an UserDTO
-     * */
+    @Override
     public User map(final UserDTO dto) {
         return new User(dto.getIdDocument(),
                 dto.getName(),
@@ -29,12 +24,7 @@ public class UserMapper {
 
     }
 
-    /**
-     * Method that map an UserDTO from an User entity.
-     *
-     * @param entity
-     * @return UserDTO - UserDTO converted from an User entity
-     * */
+    @Override
     public UserDTO map(final User entity) {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(entity.getBirthDate());
