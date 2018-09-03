@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * Class used to Map an User entity creation from an UserDTO and an UserDTO creation from an User entity.
  *
  * @author David
- * */
+ */
 
 @Component
 public class UserMapper implements Mapper<User, UserDTO> {

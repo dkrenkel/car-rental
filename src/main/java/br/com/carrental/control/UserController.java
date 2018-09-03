@@ -31,10 +31,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RestController
 @Api
 public class UserController {
-    @Autowired
-    private UserService service;
 
     private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+
+    @Autowired
+    private UserService service;
 
     /**
      * Method that gets all users registered on system.

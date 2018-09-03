@@ -13,7 +13,7 @@ import javax.persistence.TemporalType;
  * JPAEntity class of User
  *
  * @author Micael
- * */
+ */
 
 @Entity
 public class User implements JPAEntity {
@@ -58,8 +58,16 @@ public class User implements JPAEntity {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getId() {
@@ -70,31 +78,23 @@ public class User implements JPAEntity {
         return idDocument;
     }
 
+    public void setIdDocument(String idDocument) {
+        this.idDocument = idDocument;
+    }
+
     public String getAddress() {
         return address;
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public void setAddress(String address) {
         this.address = address;
     }
 
-    public void setIdDocument(String idDocument) {
-        this.idDocument = idDocument;
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 }

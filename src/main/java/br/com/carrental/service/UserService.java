@@ -28,13 +28,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+
     @Autowired
     private UserMapper userMapper;
 
     @Autowired
     private UserRepository repository;
-
-    private final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     /**
      * Method that will serach the list of users in database.
