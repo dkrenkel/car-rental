@@ -12,8 +12,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,10 +31,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RestController
 @Api
 public class UserController {
-    @Autowired
-    private UserService service;
 
     private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+
+    @Autowired
+    private UserService service;
 
     /**
      * Method that gets all users registered on system.
@@ -45,7 +44,6 @@ public class UserController {
      */
     @GetMapping("/users")
     @ApiOperation(value = "Returns all users")
-    @CachePut(value = "users")
     public ResponseEntity getUsers() {
         LOGGER.info("m=getUsers: Executing");
 
@@ -60,7 +58,6 @@ public class UserController {
      */
     @GetMapping("/users/{id}")
     @ApiOperation(value = "Returns an user with a given id")
-    @CacheEvict("users")
     public ResponseEntity getUser(@PathVariable @ApiParam("An id that will idetify the User to be searched.") final Long id) {
         LOGGER.info("m=getUser: Trying to get user, with id = {}", id);
 
