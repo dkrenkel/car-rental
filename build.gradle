@@ -39,13 +39,13 @@ dependencies {
 
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
 
+    compile group: 'org.springframework', name: 'spring-context-support', version: '4.3.18.RELEASE'
+
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
 
     compile('mysql:mysql-connector-java')
 
     compile('org.springframework.boot:spring-boot-starter-web')
-
-    compile group: 'org.springframework', name: 'spring-context-support', version: '4.3.18.RELEASE'
 
     compile('org.springframework.boot:spring-boot-starter-data-rest')
 
