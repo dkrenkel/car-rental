@@ -18,7 +18,7 @@ public class ClientRest {
     public void postOnMock(UserDTO user){
         ResponseEntity<UserDTO> response = restTemplate.postForEntity(URL_MOCK, user, UserDTO.class);
 
-        LOGGER.info("Post on mock status: " +  response.getStatusCodeValue());
+        LOGGER.info("m=postOnMock: Post on mock status: " +  response.getStatusCodeValue());
     }
 
 }
