@@ -1,9 +1,9 @@
 package br.com.carrental.client;
 
 import br.com.carrental.service.dto.UserDTO;
-import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,9 +16,9 @@ public class ClientRest {
     private static final String URL_MOCK = "http://www.mocky.io/v2/5b97c2b42f000068007b3c59";
 
     public void postOnMock(UserDTO user){
-        URI responseURI = restTemplate.postForLocation(URL_MOCK, user);
+        ResponseEntity<UserDTO> response = restTemplate.postForEntity(URL_MOCK, user, UserDTO.class);
 
-        LOGGER.info("URI post on mock " +  responseURI);
+        LOGGER.info("Post on mock status: " +  response.getStatusCodeValue());
     }
 
 }
