@@ -4,7 +4,7 @@ import br.com.carrental.service.dto.util.CalendarDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -91,5 +91,18 @@ public class UserDTO implements DTO {
 
     public void setBirthDate(Calendar birthDate) {
         this.birthDate = birthDate;
+    }
+
+    @Override
+    public String toString() {
+        return "\n{\n" +
+                "   \"idDocument\":" + "\"" + idDocument + "\",\n" +
+                "   \"name\":" + "\"" + name + "\",\n" +
+                "   \"address\":" + "\"" + address + "\",\n" +
+                "   \"email\":" + "\"" + email + "\",\n" +
+                "   \"birthDate\":" + "\"" +
+                new SimpleDateFormat("dd/MM/yyyy")
+                        .format(birthDate.getTime()) + "\"\n" +
+                "}";
     }
 }
