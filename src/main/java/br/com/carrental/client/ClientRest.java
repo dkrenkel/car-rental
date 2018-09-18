@@ -32,13 +32,13 @@ public class ClientRest {
     public void postExternal(final UserDTO user) {
         final ResponseEntity<UserDTO> response = restTemplate.postForEntity(postUrl, user, UserDTO.class);
 
-        LOGGER.info("m=postExternal: Post on mock status: " + response.getStatusCodeValue());
+        LOGGER.info("m=postExternal: Post external status: " + response.getStatusCodeValue());
     }
 
     public void getOneExternal() {
         //    Accept only the date pattern of the POST method
         final ResponseEntity<UserDTO> response = restTemplate.getForEntity(getOneUrl, UserDTO.class);
-        LOGGER.info("m=getOneExternal: Body of what it retrieve from mock: " + response.toString());
+        LOGGER.info("m=getOneExternal: Body of what it retrieve from external: " + response.toString());
     }
 
     public void getAllExternal() {
@@ -47,7 +47,7 @@ public class ClientRest {
                 null,
                 new ParameterizedTypeReference<List<UserDTO>>() {
                 });
-        LOGGER.info("m=getAllExternal: Body of what it retrieve from mock: " + response.toString());
+        LOGGER.info("m=getAllExternal: Body of what it retrieve from external: " + response.toString());
     }
 
 }
