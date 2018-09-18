@@ -1,5 +1,6 @@
 package br.com.carrental.service;
 
+import br.com.carrental.client.ClientRest;
 import br.com.carrental.config.CacheConfig;
 import br.com.carrental.model.User;
 import br.com.carrental.service.dto.UserDTO;
@@ -35,6 +36,9 @@ public class UserService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private ClientRest clientRest;
 
     /**
      * Method that will serach the list of users in database.
@@ -117,6 +121,8 @@ public class UserService {
         try {
             createdUser = repository
                     .save(userMapper.map(user));
+
+            clientRest.postOnMock(user);
         } catch (DataIntegrityViolationException e) {
             LOGGER.warn("m=saveUser: POST user idDocument = {} has conflict, ERROR:409", user.getIdDocument());
             throw new ConstraintConflictException();
