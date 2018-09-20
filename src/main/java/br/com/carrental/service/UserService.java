@@ -19,7 +19,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 /**
  * Class of services of the API
@@ -113,7 +113,7 @@ public class UserService {
      * @return Long - The id of the User that was given after the save on database.
      * @throws ConstraintConflictException - When any constraint is violated. In this case, the oneness of idDocument and/or email.
      */
-    @Transactional
+    @TransactionalEventListener
     @CacheEvict(value = CacheConfig.CACHE_USERS, allEntries = true)
     //If an user will be created, the cache of Users will be reseted.
     public Long saveUser(final UserDTO user) throws ConstraintConflictException {
