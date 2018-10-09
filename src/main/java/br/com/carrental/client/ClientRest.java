@@ -3,6 +3,7 @@ package br.com.carrental.client;
 import br.com.carrental.service.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -13,31 +14,41 @@ import java.util.List;
 
 @Component
 public class ClientRest {
-	private static final String URL_MOCK = "http://www.mocky.io/v2/5b97c2b42f000068007b3c59";
-	private static final String GET_ONE_URL_MOCK = "http://www.mocky.io/v2/5b9bb9343000007b00f6b431";
-	private static final String GET_ALL_URL_MOCK = "http://www.mocky.io/v2/5b9bbc903000006c00f6b44b";
 	private final Logger LOGGER = LoggerFactory.getLogger(ClientRest.class);
+
 	private final RestTemplate restTemplate = new RestTemplate();
 
-	public void postOnMock(final UserDTO user) {
-		final ResponseEntity<UserDTO> response = restTemplate.postForEntity(URL_MOCK, user, UserDTO.class);
+	private final String postUrl;
+	private final String getOneUrl;
+	private final String getAllUrl;
 
-		LOGGER.info("m=postOnMock: Post on mock status: " + response.getStatusCodeValue());
+	public ClientRest(@Value("${external.post}") String postUrl,
+					  @Value("${external.get.one}") String getOneUrl,
+					  @Value("${external.get.all}") String getAllUrl) {
+		this.postUrl = postUrl;
+		this.getOneUrl = getOneUrl;
+		this.getAllUrl = getAllUrl;
 	}
 
-	public void getOneFromMock() {
+	public void postExternal(final UserDTO user) {
+		final ResponseEntity<UserDTO> response = restTemplate.postForEntity(postUrl, user, UserDTO.class);
+
+		LOGGER.info("m=postExternal: Post external status: " + response.getStatusCodeValue());
+	}
+
+	public void getOneExternal() {
 		//    Accept only the date pattern of the POST method
-		final ResponseEntity<UserDTO> response = restTemplate.getForEntity(GET_ONE_URL_MOCK, UserDTO.class);
-		LOGGER.info("m=getOneFromMock: Body of what it retrieve from mock: " + response.toString());
+		final ResponseEntity<UserDTO> response = restTemplate.getForEntity(getOneUrl, UserDTO.class);
+		LOGGER.info("m=getOneExternal: Body of what it retrieve from external: " + response.toString());
 	}
 
-	public void getAllFromMock() {
-		final ResponseEntity<List<UserDTO>> response = restTemplate.exchange(GET_ALL_URL_MOCK,
+	public void getAllExternal() {
+		final ResponseEntity<List<UserDTO>> response = restTemplate.exchange(getAllUrl,
 				HttpMethod.GET,
 				null,
 				new ParameterizedTypeReference<List<UserDTO>>() {
 				});
-		LOGGER.info("m=getAllFromMock: Body of what it retrieve from mock: " + response.toString());
+		LOGGER.info("m=getAllExternal: Body of what it retrieve from external: " + response.toString());
 	}
 
 }
