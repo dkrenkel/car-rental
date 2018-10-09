@@ -15,13 +15,13 @@ import java.util.List;
 @Component
 public interface ClientFeign {
 
-	@PostMapping("/5b97c2b42f000068007b3c59")
+	@PostMapping("${external.post}")
 	ResponseEntity<Object> postExternal(@RequestBody UserDTO user);
 
-	@GetMapping("/5b9bb9343000007b00f6b431")
+	@GetMapping("${external.get.one}")
 	ResponseEntity<UserDTO> getUser(@PathVariable(name = "id") Long id);
 
-	@GetMapping("/5b9bbc903000006c00f6b44b")
+	@GetMapping("${external.get.all}")
 	ResponseEntity<List<UserDTO>> getUsers();
 
 }

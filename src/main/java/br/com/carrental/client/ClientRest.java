@@ -22,12 +22,13 @@ public class ClientRest {
 	private final String getOneUrl;
 	private final String getAllUrl;
 
-	public ClientRest(@Value("${external.post}") String postUrl,
+	public ClientRest(@Value("${external.base.uri}") String base,
+					  @Value("${external.post}") String postUrl,
 					  @Value("${external.get.one}") String getOneUrl,
 					  @Value("${external.get.all}") String getAllUrl) {
-		this.postUrl = postUrl;
-		this.getOneUrl = getOneUrl;
-		this.getAllUrl = getAllUrl;
+		this.postUrl = base + postUrl;
+		this.getOneUrl = base + getOneUrl;
+		this.getAllUrl = base + getAllUrl;
 	}
 
 	public void postExternal(final UserDTO user) {
