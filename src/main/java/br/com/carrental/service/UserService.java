@@ -1,5 +1,6 @@
 package br.com.carrental.service;
 
+import br.com.carrental.client.ClientFeign;
 import br.com.carrental.client.ClientRest;
 import br.com.carrental.config.CacheConfig;
 import br.com.carrental.model.User;
@@ -41,6 +42,9 @@ public class UserService {
 
 	@Autowired
 	private ClientRest clientRest;
+
+	@Autowired
+	private ClientFeign clientFeign;
 
 	/**
 	 * Method that will serach the list of users in database.
