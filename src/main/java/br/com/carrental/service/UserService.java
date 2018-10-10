@@ -47,7 +47,7 @@ public class UserService {
 	private ClientFeign clientFeign;
 
 	/**
-	 * Method that will serach the list of users in database.
+	 * Method that will search the list of users in database.
 	 *
 	 * @return List - A List of Users, if does not exist an User in database, the list will be empty.
 	 */
@@ -66,7 +66,7 @@ public class UserService {
 	}
 
 	/**
-	 * Method that will serach in the list of users in database for a user with a given id.
+	 * Method that will search in the list of users in database for a user with a given id.
 	 *
 	 * @param id
 	 * @return UserDTO - The User with id that was given.
@@ -89,7 +89,7 @@ public class UserService {
 	}
 
 	/**
-	 * Method that will serach in the list of users in database for a user with a given id and delete it.
+	 * Method that will search in the list of users in database for a user with a given id and delete it.
 	 *
 	 * @param id
 	 * @throws EntityNotFoundException - When the user is not found on database
